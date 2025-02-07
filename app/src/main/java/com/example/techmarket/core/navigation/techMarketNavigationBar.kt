@@ -17,12 +17,10 @@ import com.example.techmarket.latech.presentation.account.ProfileScreen
 import com.example.techmarket.latech.presentation.account.ProfileViewModel
 import com.example.techmarket.latech.presentation.admin.AdminDashboardScreen
 import com.example.techmarket.latech.presentation.admin.AdminViewModel
-import com.example.techmarket.latech.presentation.connection.ConnectionScreen
 import com.example.techmarket.latech.presentation.auth.LoginScreen
 import com.example.techmarket.latech.presentation.auth.RegisterScreen
 import com.example.techmarket.latech.presentation.auth.components.viewModel.LoginViewModel
 import com.example.techmarket.latech.presentation.cart.CartViewModel
-import com.example.techmarket.latech.presentation.connection.components.ConnectionViewModel
 import com.example.techmarket.latech.presentation.home.HomeNavType
 import com.example.techmarket.latech.presentation.home.HomeScreen
 import com.example.techmarket.latech.presentation.home.HomeViewModel
@@ -44,7 +42,6 @@ fun TechMarketNavigationBar(
     loginViewModel: LoginViewModel = koinViewModel(),
     searchViewModel: SearchViewModel = koinViewModel(),
     homeViewModel: HomeViewModel = koinViewModel(),
-    connectionViewModel: ConnectionViewModel = koinViewModel(),
     adminViewModel: AdminViewModel= koinViewModel(),
     productViewModel: ProductViewModel = koinViewModel(),
     cartViewModel: CartViewModel = koinViewModel(),
@@ -66,9 +63,9 @@ fun TechMarketNavigationBar(
         composable<OnBoarding> {
             OnBoardingScreen(navController, onBoardingState)
         }
-        composable<Connection> {
-            ConnectionScreen(navController, connectionViewModel.connectionState)
-        }
+//        composable<Connection> {
+//            ConnectionScreen(navController, connectionViewModel.connectionState)
+//        }
         composable<Register> {
             RegisterScreen(navController = navController)
         }

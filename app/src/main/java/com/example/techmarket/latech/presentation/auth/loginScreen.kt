@@ -1,10 +1,7 @@
 package com.example.techmarket.latech.presentation.auth
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.techmarket.R
 import com.example.techmarket.core.navigation.Register
+import com.example.techmarket.core.presentation.util.toString
 import com.example.techmarket.latech.presentation.auth.components.TextEntryModule
 import com.example.techmarket.latech.presentation.auth.components.viewModel.LoginViewModel
 import com.example.techmarket.ui.theme.onPrimaryContainerLight
@@ -86,10 +84,9 @@ fun LoginScreen(
             onEmailChange = viewModel::onEmailChange,
             onPasswordChange = viewModel::onPasswordChange,
             isLoading = { viewModel.loginState.isLoading },
-            enableButton = viewModel.loginState.emailInput.isNotBlank() && viewModel.loginState.passwordInput.isNotBlank(),
-            onLoginButtonClick = {
-                viewModel.loginWithEmail()
-            },
+            enableButton = true,
+            onLoginButtonClick = { viewModel.loginWithEmail() },
+            errorHint = viewModel.loginState.error?.toString(LocalContext.current) ?: "",
             modifier = Modifier
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -107,7 +104,7 @@ fun LoginScreen(
 
         if (viewModel.loginState.isSuccess && viewModel.loginState.isAdmin) {
             navController.navigate("Admin")
-        }else if (viewModel.loginState.isSuccess&& !viewModel.loginState.isAdmin) {
+        } else if (viewModel.loginState.isSuccess && !viewModel.loginState.isAdmin) {
             navController.navigate("Home")
         }
 
@@ -139,6 +136,7 @@ fun LoginContainer(
     isLoading: () -> Boolean,
     enableButton: Boolean = true,
     onLoginButtonClick: () -> Unit,
+    errorHint: String,
     modifier: Modifier
 ) {
     Column(
@@ -171,29 +169,39 @@ fun LoginContainer(
             onValueChange = onPasswordChange
         )
         Spacer(modifier = Modifier.height(30.dp))
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            onClick = onLoginButtonClick,
-            enabled = enableButton,
-            shape = RoundedCornerShape(5.dp),
-            colors = ButtonColors(
-                containerColor = Color.White,
-                contentColor = Color.Black,
-                disabledContainerColor = Color.White,
-                disabledContentColor = Color.Black
-            )
-        ) {
+        Column {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                onClick = onLoginButtonClick,
+                enabled = enableButton,
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.White,
+                    disabledContentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.login),
+                    fontWeight = FontWeight.Bold,
+                    color = onPrimaryContainerLight,
+                    textAlign = TextAlign.Start,
+                    fontSize = 19.sp,
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = stringResource(R.string.login),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = errorHint,
                 fontWeight = FontWeight.Bold,
-                color = onPrimaryContainerLight,
+                color = Color.Red,
                 textAlign = TextAlign.Start,
                 fontSize = 19.sp,
             )
         }
-
     }
 }
 

@@ -6,6 +6,8 @@ package com.example.techmarket.di
 import com.example.techmarket.core.data.datasource.UserPreferencesRepositoryImpl
 import com.example.techmarket.core.data.local.AppPreferencesDataSource
 import com.example.techmarket.core.domain.datasource.UserPreferencesRepository
+import com.example.techmarket.core.domain.use_case.ValidateLoginInputCase
+import com.example.techmarket.core.domain.use_case.ValidateRegisterInputCase
 import com.example.techmarket.latech.data.dataSource.account.ProfileRepositoryImpl
 import com.example.techmarket.latech.data.dataSource.admin.AdminRepositoryImpl
 import com.example.techmarket.latech.data.dataSource.auth.AuthRepositoryImpl
@@ -31,5 +33,7 @@ val appModule = module{
     single { HomeRepositoryImpl(get()) }
     single { CartRepositoryImpl(get()) }
     single { ProfileRepositoryImpl(get(),get(),get()) }
+    single { ValidateLoginInputCase() }
+    single { ValidateRegisterInputCase() }
 
 }

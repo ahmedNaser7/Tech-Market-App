@@ -8,6 +8,7 @@ import com.example.techmarket.latech.domain.dataSource.account.ProfileRepository
 import io.github.jan.supabase.auth.auth
 import com.example.techmarket.core.domain.util.Result
 import com.example.techmarket.core.domain.util.error.AuthError
+import com.example.techmarket.core.domain.util.error.UserAppPreferencesError
 import com.example.techmarket.core.domain.util.onError
 import com.example.techmarket.core.domain.util.onSuccess
 import com.example.techmarket.latech.domain.model.Profile
@@ -20,21 +21,21 @@ class ProfileRepositoryImpl(
     private val appPreferencesDataSource: AppPreferencesDataSource,
     private val userPreferencesRepository: UserPreferencesRepository
 ): ProfileRepository{
-    override suspend fun getAccountInfo(): Result<Profile, AuthError> {
+    override suspend fun getAccountInfo(): Result<Profile, UserAppPreferencesError> {
         userPreferencesRepository.getUserDetails().onSuccess {
             Log.d("UserDetails", "getAccountInfo: ${it.first()}")
             return Result.Success(it.first().toProfile())
         }.onError {
             return Result.Error(it)
         }
-        return Result.Error(AuthError.UserNotFound)
+        return Result.Error(UserAppPreferencesError.UserNotFound)
     }
 
     override suspend fun logOut(): Result<Boolean,AuthError> {
         try {
             appPreferencesDataSource.saveLoginState(false)
             appPreferencesDataSource.saveRoleState(null)
-
+            userPreferencesRepository.clearUserDetails()
             Log.d("LogOut", "logOut: ${appPreferencesDataSource.isUserLoggedIn.first()}")
             supabase.createClient.auth.signOut()
             return Result.Success(true)

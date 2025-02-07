@@ -12,7 +12,6 @@ import com.example.techmarket.latech.presentation.admin.AdminViewModel
 import com.example.techmarket.latech.presentation.auth.components.viewModel.LoginViewModel
 import com.example.techmarket.latech.presentation.auth.components.viewModel.RegisterViewModel
 import com.example.techmarket.latech.presentation.cart.CartViewModel
-import com.example.techmarket.latech.presentation.connection.components.ConnectionViewModel
 import com.example.techmarket.latech.presentation.home.HomeViewModel
 import com.example.techmarket.latech.presentation.onBoarding.components.viewModel.OnBoardingViewModel
 import com.example.techmarket.latech.presentation.product.ProductViewModel
@@ -28,9 +27,8 @@ val viewModelModule = module {
     viewModel { ProductViewModel(ProductRepositoryImpl(get())) }
     viewModel{ OnBoardingViewModel(androidContext(), AppPreferencesDataSource(androidContext())) }
     viewModel{ AdminViewModel(Supabase, AdminRepositoryImpl(get(),get())) }
-    viewModelOf(::LoginViewModel)
+    viewModel { LoginViewModel(get()) }
     viewModelOf(::RegisterViewModel)
-    viewModelOf(::ConnectionViewModel)
     viewModel{ CartViewModel(CartRepositoryImpl(get())) }
     viewModel{ ProfileViewModel(ProfileRepositoryImpl(get(),get(),get())) }
     viewModel { SearchViewModel(HomeRepositoryImpl()) }

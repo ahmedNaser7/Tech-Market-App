@@ -5,4 +5,11 @@ enum class AuthError: Error {
     LoginError,
     RegisterError,
     LogOutError,
+
+}
+
+enum class UserAppPreferencesError : Error {
+    UserNotFound,
+    UserUpdateError,
+    UserDeleteError,
 }

@@ -1,8 +1,6 @@
 package com.example.techmarket.latech.presentation.auth
 
-import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.techmarket.R
 import com.example.techmarket.core.navigation.Login
+import com.example.techmarket.core.presentation.util.toString
 import com.example.techmarket.latech.presentation.auth.components.TextEntryModule
 import com.example.techmarket.latech.presentation.auth.components.viewModel.RegisterViewModel
 import com.example.techmarket.ui.theme.onPrimaryContainerLight
@@ -83,15 +82,18 @@ fun RegisterScreen(
         RegisterContainer(
             userNameValue = {viewModel.registerState.usernameInput},
             emailValue = { viewModel.registerState.emailInput },
+            addressValue = { viewModel.registerState.addressInput },
             passwordValue = { viewModel.registerState.passwordInput},
             onUserNameChange = viewModel::onUsernameChange,
             onEmailChange = viewModel::onEmailChange,
             onPasswordChange = viewModel::onPasswordChange,
+            onAddressChange = viewModel::onAddressChange,
             isLoading = {viewModel.registerState.isLoading},
-            enableButton = viewModel.registerState.emailInput.isNotBlank() && viewModel.registerState.passwordInput.isNotBlank() ,
+            enableButton = true,
             onRegisterButtonClick = {
                viewModel.register()
             },
+            errorHint = viewModel.registerState.error?.toString(LocalContext.current) ?: "",
             modifier = Modifier
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -110,11 +112,11 @@ fun RegisterScreen(
             navController.navigate(Login)
         }
 
-        if(viewModel.registerState.isError != null){
-           Log.d("RegisterScreen", viewModel.registerState.isError.toString())
+        if (viewModel.registerState.error != null) {
+            Log.d("RegisterScreen", viewModel.registerState.error.toString())
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = stringResource(R.string.already_have_an_account),
@@ -124,6 +126,7 @@ fun RegisterScreen(
             fontWeight = FontWeight.Bold,
             color = yellowFontColor,
         )
+        Spacer(modifier = Modifier.height(20.dp))
 
     }
 }
@@ -133,10 +136,13 @@ fun RegisterContainer(
     userNameValue: () -> String,
     emailValue: () -> String,
     passwordValue: () -> String,
+    addressValue: () -> String,
     onUserNameChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
+    onAddressChange: (String) -> Unit,
     isLoading:()->Boolean,
+    errorHint: String,
     enableButton: Boolean = true,
     onRegisterButtonClick: () -> Unit,
     modifier: Modifier
@@ -153,7 +159,7 @@ fun RegisterContainer(
             hint = "Full name",
             textValue = userNameValue(),
             cursorColor = Color.Black,
-            keyboardType = KeyboardType.Email,
+            keyboardType = KeyboardType.Text,
             onValueChange = onUserNameChange
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -170,6 +176,19 @@ fun RegisterContainer(
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // address Field
+        TextEntryModule(
+            modifier = Modifier.fillMaxWidth(),
+            description = stringResource(R.string.address),
+            hint = "Address",
+            textValue = addressValue(),
+            cursorColor = Color.Black,
+            keyboardType = KeyboardType.Text,
+            onValueChange = onAddressChange
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         // Password Field
         TextEntryModule(
             modifier = Modifier.fillMaxWidth(),
@@ -182,29 +201,39 @@ fun RegisterContainer(
             onValueChange = onPasswordChange
         )
         Spacer(modifier = Modifier.height(30.dp))
-        
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-            onClick = onRegisterButtonClick,
-            enabled = enableButton,
-            shape = RoundedCornerShape(5.dp),
-            colors = ButtonColors(
-            containerColor = Color.White,
-            contentColor = Color.Black,
-            disabledContainerColor = Color.White,
-            disabledContentColor = Color.Black)
-        ){
+        Column {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                onClick = onRegisterButtonClick,
+                enabled = enableButton,
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.White,
+                    disabledContentColor = Color.Black
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.Register),
+                    fontWeight = FontWeight.Bold,
+                    color = onPrimaryContainerLight,
+                    textAlign = TextAlign.Start,
+                    fontSize = 19.sp,
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = stringResource(R.string.Register),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = errorHint,
                 fontWeight = FontWeight.Bold,
-                color = onPrimaryContainerLight,
+                color = Color.Red,
                 textAlign = TextAlign.Start,
                 fontSize = 19.sp,
             )
         }
-
     }
 }
 

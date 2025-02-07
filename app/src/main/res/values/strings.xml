@@ -35,4 +35,5 @@
     <string name="customer_login">Customer Login</string>
     <string name="admin_login">Admin Login</string>
     <string name="logOut_error">Log-Out Error</string>
+    <string name="address">Address</string>
 </resources>
