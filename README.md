@@ -47,5 +47,4 @@ Tech Market is a sleek and modern **e-commerce mobile application** built for An
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/tech-market-app.git
-cd tech-market-app
+git clone https://github.com/ahmedNaser7/Tech-Market-App.git
